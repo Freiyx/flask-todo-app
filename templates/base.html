@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
+
+</head>
+
+<body>
+    <div class="container" style="padding: 20px">
+      <h1 style="text-align: center">TODO APP</h1>
+
+      <div>
+        <h4 style="text-align: center">Create a task</h4>
+        <div class="row" style="justify-content: center">
+            <form method="POST">
+              {{ add_task_form.hidden_tag() }}
+              <fieldset>
+                {{add_task_form.name.label()}}
+                {{add_task_form.name}}
+
+                {{add_task_form.priority.label()}}
+                {{add_task_form.priority}}
+
+                {{add_task_form.submit()}}
+              </fieldset>
+            </form>
+
+        </div>
+      </div>
+
+      <div style="margin-top:20px">
+            <h4 style="text-align: center">Ongoing Tasks</h4>
+            {% if ongoing_task.count() == 0 %}
+                <h5 style="text-align: center">No task created. Create tasks above.</h5>
+            {% else %}
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width:22%">Name</th>
+                        <th style="width:22%">Priority</th>
+                        <th style="width:22%">Progress</th>
+                        <th style="width:22%">Edit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in ongoing_task %}
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.priority }}</td>
+                            <td> In Progress </td>
+                            <td class="row">
+                                <div class="column column-25">
+                                    <form method="POST" style="margin-bottom: 0; margin-top:10px">
+                                        {{ complete_form.hidden_tag() }}
+                                        <input id="completed_task" name="completed_task" type="hidden" value="{{task.id}}">
+                                        {{ complete_form.submit(class="button button-clear") }}
+                                    </form>
+                                </div>
+                                <div class="column column-25">
+                                    <form method="POST" style="margin-bottom: 0; margin-top:10px">
+                                        {{ delete_form.hidden_tag() }}
+                                        <input id="deleted_task_ongoing" name="deleted_task" type="hidden" value="{{task.id}}">
+                                        {{ delete_form.submit(class="button button-clear delete") }}
+                                    </form>
+                                </div>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+
+      </div>
+
+      <div style="margin-top:60px">
+        <h4 style="text-align: center">Completed Tasks</h4>
+        {% if completed_task.count() == 0 %}
+            <h5 style="text-align: center">No task completed.</h5>
+        {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:22%">Name</th>
+                    <th style="width:22%">Priority</th>
+                    <th style="width:22%">Progress</th>
+                    <th style="width:22%">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in completed_task %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td> Completed </td>
+                        <td class="row">
+                            <div class="column column-25">
+                                <form method="POST" style="margin-bottom: 0; margin-top:10px">
+                                    {{ delete_form.hidden_tag() }}
+                                    <input id="deleted_task_completed" name="deleted_task" type="hidden" value="{{task.id}}">
+                                    {{ delete_form.submit(class="button button-clear delete") }}
+                                </form>
+                            </div>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+</body>
+<style>
+    .delete {
+        color: red !important
+    }
+</style>
+</html>
